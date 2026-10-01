@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Island | Get in Touch</title>
+<style>
+  :root{
+    --bg:#051714;
+    --bg-2:#082420;
+    --surface:#0B2A25;
+    --line:rgba(255,255,255,.14);
+    --line-strong:rgba(255,255,255,.28);
+    --text:#FFFFFF;
+    --muted:#A9BDB8;
+    --charcoal:#343434;
+    --accent:#7CF0C0;
+    --err:#FF8A8A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{min-height:100%}
+  body{
+    font-family:"Suisse Int'l","Suisse Intl","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+    color:var(--text);background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+  }
+  .page{
+    position:relative;min-height:100vh;width:100%;overflow:hidden;
+    display:grid;grid-template-columns:1.05fr .95fr;
+    background:
+      radial-gradient(1100px 700px at 8% 105%, rgba(124,240,192,.16), transparent 60%),
+      radial-gradient(900px 600px at 100% -10%, rgba(40,120,100,.35), transparent 60%),
+      linear-gradient(180deg,#051714 0%,#04120F 100%);
+  }
+  .page::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:72px 72px;
+    -webkit-mask-image:radial-gradient(ellipse at 20% 80%,#000 0%,transparent 65%);
+            mask-image:radial-gradient(ellipse at 20% 80%,#000 0%,transparent 65%);
+    opacity:.18;
+  }
+
+  .brand{position:relative;padding:56px 72px;display:flex;flex-direction:column;justify-content:space-between;z-index:1}
+  .logo svg{height:40px;width:auto;display:block}
+  .hero h1{font-size:clamp(38px,4.6vw,66px);line-height:1.02;letter-spacing:-.035em;font-weight:500;max-width:640px}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero p{margin-top:24px;font-size:19px;line-height:1.55;color:var(--muted);max-width:520px}
+  .points{margin-top:40px;display:grid;gap:14px}
+  .point{display:flex;align-items:center;gap:14px;font-size:16px;color:#E3EEEB}
+  .point i{width:8px;height:8px;border-radius:50%;background:var(--accent);flex:none;box-shadow:0 0 0 5px rgba(124,240,192,.14)}
+  .foot{font-size:13px;color:#7F9792}
+
+  .panel{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;padding:48px 56px 48px 24px}
+  .card{
+    width:100%;max-width:560px;padding:44px;border-radius:24px;
+    background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));
+    border:1px solid var(--line);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    box-shadow:0 30px 80px -30px rgba(0,0,0,.7);
+  }
+  .eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:500}
+  h2{font-size:34px;letter-spacing:-.025em;margin-top:12px;font-weight:500}
+  .sub{color:var(--muted);margin-top:10px;font-size:16px;line-height:1.5}
+  form{margin-top:30px;display:grid;gap:18px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .field{display:grid;gap:8px}
+  label{font-size:14px;font-weight:500;color:#E3EEEB}
+  label .req{color:var(--accent);margin-left:3px}
+  input{
+    width:100%;height:52px;padding:0 16px;font:inherit;font-size:16px;color:#fff;
+    background:rgba(5,23,20,.65);border:1px solid var(--line);border-radius:12px;outline:none;
+    transition:border-color .15s, box-shadow .15s, background .15s;
+  }
+  input::placeholder{color:#678079}
+  input:hover{border-color:var(--line-strong)}
+  input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(124,240,192,.16);background:rgba(5,23,20,.9)}
+  .field.invalid input{border-color:var(--err);box-shadow:0 0 0 4px rgba(255,138,138,.12)}
+  .msg{font-size:13px;color:var(--err);display:none}
+  .field.invalid .msg{display:block}
+  button{
+    height:56px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:17px;font-weight:500;
+    color:var(--bg);background:#fff;margin-top:6px;
+    transition:transform .12s, background .12s, box-shadow .12s;
+  }
+  button:hover{background:var(--accent);transform:translateY(-1px);box-shadow:0 12px 30px -10px rgba(124,240,192,.6)}
+  button:active{transform:translateY(0)}
+  button:disabled{opacity:.7;cursor:wait}
+  button:focus-visible{outline:3px solid rgba(124,240,192,.5);outline-offset:3px}
+  .consent{font-size:12.5px;color:#7F9792;line-height:1.55}
+  .consent a{color:#A9BDB8}
+
+  .success{display:none}
+  .success.show{display:block}
+  .check{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;margin-bottom:24px;background:rgba(124,240,192,.14);border:1px solid rgba(124,240,192,.5)}
+  .check::after{content:"";width:12px;height:24px;border:solid var(--accent);border-width:0 3px 3px 0;transform:rotate(45deg) translate(-2px,-2px)}
+  .again{margin-top:28px;background:transparent;color:#fff;border:1px solid var(--line-strong);padding:0 26px;height:48px;font-size:15px}
+  .again:hover{background:rgba(255,255,255,.08);box-shadow:none}
+
+  @media (max-width:960px){
+    .page{grid-template-columns:1fr}
+    .brand{padding:36px 28px 8px;gap:36px}
+    .panel{padding:24px 20px 40px}
+    .card{padding:28px 22px}
+    .row{grid-template-columns:1fr}
+    .foot{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <section class="brand">
+    <div class="logo" aria-label="Island">
+      <svg viewBox="0 0 431 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Island">
+        <g fill="white">
+          <path d="M50 0C77.6142 3.50477e-05 100 22.3858 100 50C100 77.6142 77.6142 100 50 100C22.3858 100 2.0619e-05 77.6142 0 50C0 22.3858 22.3858 0 50 0ZM50 11.6475C39.8146 11.6475 30.0459 15.6933 22.8438 22.8955C18.0228 27.7165 14.6164 33.688 12.8906 40.1641C11.4687 45.5005 16.073 50.0516 21.5957 50.0518L78.4043 50.0518C83.9269 50.0516 88.5312 45.5005 87.1094 40.1641C85.3836 33.6879 81.9763 27.7166 77.1553 22.8955C69.9532 15.6936 60.1852 11.6475 50 11.6475Z"/>
+          <path d="M141.381 11H130V90.6645H141.381V11Z"/>
+          <path d="M183.206 59.8808L170.272 57.0299C165.45 55.9346 163.694 53.9604 163.694 50.8909C163.694 47.0552 166.655 43.7649 173.342 43.7649C180.358 43.7649 184.851 47.3842 185.728 52.6443H197.105C196.118 41.0561 185.758 34.6667 173.671 34.6667C160.627 34.6667 152.313 41.802 152.313 51.8871C152.313 59.5609 157.557 64.5931 166.984 66.6756L178.823 69.087C183.864 70.1845 186.168 72.267 186.168 75.555C186.168 79.8302 182 82.7915 175.424 82.7915C168.298 82.7915 162.415 80.0511 161.649 73.583H150.268C150.314 74.2206 149.702 92.1082 174.437 92.1082C188.031 92.1082 197.531 85.9516 197.531 74.5503C197.531 66.8789 191.978 61.7446 183.206 59.8808Z"/>
+          <path d="M233.242 79.2838V79.2928C228.989 79.3199 225.667 79.2147 222.364 75.9118C218.963 72.5102 219.005 69.2083 219.005 64.8859V11H207.625V64.9991C207.631 72.0301 208.455 78.087 214.367 83.9994C219.999 89.6307 226.033 90.6924 232.742 90.6663L236.094 90.6645V79.284L233.242 79.2838Z"/>
+          <path d="M298.081 90.6673H286.701V84.3992C282.031 89.2859 275.3 92.11 267.156 92.11C253.038 92.11 240.443 80.7087 240.443 63.6599C240.443 46.7202 253.038 35.2098 267.156 35.2098C275.3 35.2098 282.031 38.0338 286.701 42.9206V36.73H298.081V90.6673ZM286.29 63.6599C286.29 52.631 277.699 45.6296 269.003 45.6296C259.35 45.6296 251.821 52.631 251.821 63.6599C251.821 74.7956 259.35 81.6902 269.003 81.6902C277.699 81.6902 286.29 74.7956 286.29 63.6599Z"/>
+          <path d="M363.333 57.8645V90.6641H351.953V60.1655C351.953 51.2861 346.801 45.3679 339.016 45.3679C329.26 45.3679 322.792 51.9442 322.792 65.6465V90.6642H311.412V36.7269H322.792V43.0646C327.178 37.8045 333.536 34.8432 341.649 34.8432C354.693 34.8433 363.333 44.2704 363.333 57.8645Z"/>
+          <path d="M429.815 90.675H418.435V84.3963C413.764 89.2831 407.033 92.1071 398.89 92.1071C384.772 92.1071 372.177 80.7058 372.177 63.657C372.177 46.7174 384.772 35.207 398.89 35.207C407.034 35.207 413.764 38.031 418.435 42.9178V11H429.815V90.675ZM418.024 63.6571C418.024 52.6282 409.433 45.6268 400.737 45.6268C391.084 45.6268 383.555 52.6282 383.555 63.6571C383.555 74.7928 391.084 81.6874 400.737 81.6874C409.433 81.6874 418.024 74.7928 418.024 63.6571Z"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="hero">
+      <h1>The control plane for your <em>agentic enterprise.</em></h1>
+      <p>Where access, security, and AI-powered productivity create the perfect conditions for work to thrive. Tell us a bit about you and we will be in touch.</p>
+      <div class="points">
+        <div class="point"><i></i>The Enterprise Browser</div>
+        <div class="point"><i></i>Enterprise AI</div>
+        <div class="point"><i></i>The Enterprise Network</div>
+      </div>
+    </div>
+
+    <div class="foot">&copy; Island. All rights reserved.</div>
+  </section>
+
+  <section class="panel">
+    <div class="card">
+
+      <div id="formWrap">
+        <div class="eyebrow">Let's connect</div>
+        <h2>Get in touch with Island</h2>
+        <p class="sub">Share your details and our team will follow up shortly.</p>
+
+        <form id="leadForm" novalidate>
+          <div class="row">
+            <div class="field" data-field="first">
+              <label for="first">First name<span class="req">*</span></label>
+              <input id="first" name="first" type="text" autocomplete="given-name" placeholder="Jane">
+              <div class="msg">Please enter your first name.</div>
+            </div>
+            <div class="field" data-field="last">
+              <label for="last">Last name<span class="req">*</span></label>
+              <input id="last" name="last" type="text" autocomplete="family-name" placeholder="Doe">
+              <div class="msg">Please enter your last name.</div>
+            </div>
+          </div>
+
+          <div class="field" data-field="email">
+            <label for="email">Work email<span class="req">*</span></label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="jane.doe@company.com">
+            <div class="msg">Please enter a valid email address.</div>
+          </div>
+
+          <div class="field" data-field="phone">
+            <label for="phone">Phone number<span class="req">*</span></label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="(555) 123-4567">
+            <div class="msg">Please enter a valid phone number.</div>
+          </div>
+
+          <div class="field" data-field="business">
+            <label for="business">Business<span class="req">*</span></label>
+            <input id="business" name="business" type="text" autocomplete="organization" placeholder="Company name">
+            <div class="msg">Please enter your business name.</div>
+          </div>
+
+          <button type="submit">Submit</button>
+          <p class="consent">By submitting this form you consent to be contacted by Island and acknowledge our <a href="https://www.island.io/legal/privacy" target="_blank" rel="noopener">Privacy Policy</a>.</p>
+        </form>
+      </div>
+
+      <div id="success" class="success" role="status" aria-live="polite">
+        <div class="check"></div>
+        <div class="eyebrow">You're all set</div>
+        <h2>Thanks, <span id="thanksName"></span>.</h2>
+        <p class="sub">We got your info and someone from the Island team will be in touch soon.</p>
+        <button type="button" class="again" id="again">Submit another response</button>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  var form = document.getElementById('leadForm');
+  var wrap = document.getElementById('formWrap');
+  var success = document.getElementById('success');
+  var nameEl = document.getElementById('thanksName');
+
+  var rules = {
+    first:    function(v){ return v.trim().length > 0; },
+    last:     function(v){ return v.trim().length > 0; },
+    email:    function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()); },
+    phone:    function(v){ return v.replace(/\D/g,'').length >= 10; },
+    business: function(v){ return v.trim().length > 0; }
+  };
+
+  function setState(key, ok){
+    form.querySelector('[data-field="'+key+'"]').classList.toggle('invalid', !ok);
+  }
+
+  Object.keys(rules).forEach(function(key){
+    var input = document.getElementById(key);
+    input.addEventListener('blur', function(){ setState(key, rules[key](input.value)); });
+    input.addEventListener('input', function(){
+      if(form.querySelector('[data-field="'+key+'"]').classList.contains('invalid')){
+        setState(key, rules[key](input.value));
+      }
+    });
+  });
+
+  document.getElementById('phone').addEventListener('input', function(e){
+    var d = e.target.value.replace(/\D/g,'');
+    if(d.length > 10 && d[0] === '1') d = d.slice(1);
+    d = d.slice(0,10);
+    var out = d;
+    if(d.length > 6) out = '('+d.slice(0,3)+') '+d.slice(3,6)+'-'+d.slice(6);
+    else if(d.length > 3) out = '('+d.slice(0,3)+') '+d.slice(3);
+    else if(d.length > 0) out = '('+d;
+    e.target.value = out;
+  });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var allOk = true, firstBad = null;
+    Object.keys(rules).forEach(function(key){
+      var ok = rules[key](document.getElementById(key).value);
+      setState(key, ok);
+      if(!ok){ allOk = false; if(!firstBad) firstBad = key; }
+    });
+    if(!allOk){ document.getElementById(firstBad).focus(); return; }
+
+    var payload = {
+      firstName: document.getElementById('first').value.trim(),
+      lastName:  document.getElementById('last').value.trim(),
+      email:     document.getElementById('email').value.trim(),
+      phone:     document.getElementById('phone').value.trim(),
+      business:  document.getElementById('business').value.trim()
+    };
+
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Sending...';
+
+    function done(){
+      nameEl.textContent = payload.firstName;
+      wrap.style.display = 'none';
+      success.classList.add('show');
+      btn.disabled = false; btn.textContent = 'Submit';
+    }
+
+    var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxQMzPPzEr-FS7teTktxMjLqEJymqTQIzVbHX_zq9B6BaG3D-SouqPknyEc5eijMhTkBA/exec';
+
+    var body = new URLSearchParams(payload).toString();
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type':'application/x-www-form-urlencoded'},
+      body: body
+    }).then(done).catch(function(){
+      btn.disabled = false; btn.textContent = 'Submit';
+      alert('Something went wrong. Please try again.');
+    });
+  });
+
+  document.getElementById('again').addEventListener('click', function(){
+    form.reset();
+    form.querySelectorAll('.field').forEach(function(f){ f.classList.remove('invalid'); });
+    success.classList.remove('show');
+    wrap.style.display = 'block';
+    document.getElementById('first').focus();
+  });
+})();
+</script>
+</body>
+</html>
